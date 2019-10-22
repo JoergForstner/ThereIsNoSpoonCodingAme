@@ -55,7 +55,7 @@ class Player
         };
         //if Node is not a node, the node above must have NeighborCoordinates -1,-1
         if (i > 0 & NodeList[i*width + j].IsNode) {
-          for(int k = i-1; k <= 0; k--)
+          for(int k = i-1; k >= 0; k--)
           {
             if (NodeList[k * width + j].IsNode)
             {
