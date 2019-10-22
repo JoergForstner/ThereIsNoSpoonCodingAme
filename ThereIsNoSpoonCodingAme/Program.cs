@@ -31,22 +31,39 @@ class Player
     for (int i = 0; i < height; i++)
     {
       string line = Console.ReadLine(); // width characters, each either 0 or .
-      for(int j = 0; j < line.Length; j++)
+      var lastNodeIndexinRow = -1;
+      for (int j = 0; j < line.Length; j++)
       {
         NodeList.Add(new Node
         {
           OwnX = j,
           OwnY = i,
-          NeighborRightX = j == line.Length -1 ? -1: (line[j+1] == '.'? -1 : j+1),
-          NeighborRightY = j == line.Length - 1 ? -1 : (line[j + 1] == '.' ? -1 : i),
-          NeighborBottomX = i == height - 1 ? -1 : j,
-          NeighborBottomY = i == height-1? -1: i+1,
+          NeighborRightX = -1,
+          NeighborRightY = -1,
+          NeighborBottomX = -1,
+          NeighborBottomY = -1,
           IsNode = line[j] == '0' ? true : false
         });
+        if (NodeList[i * width + j].IsNode)
+        {
+          if (lastNodeIndexinRow != -1)
+          { 
+            NodeList[lastNodeIndexinRow].NeighborRightX = NodeList[i * width + j].OwnX;
+            NodeList[lastNodeIndexinRow].NeighborRightY = NodeList[i * width + j].OwnY;
+          }
+          lastNodeIndexinRow = i * width + j;
+        };
         //if Node is not a node, the node above must have NeighborCoordinates -1,-1
-        if (i > 0 & !NodeList[i*width + j].IsNode) {
-          NodeList[(i - 1) * width + j].NeighborBottomX = -1;
-          NodeList[(i - 1) * width + j].NeighborBottomY = -1;
+        if (i > 0 & NodeList[i*width + j].IsNode) {
+          for(int k = i-1; k <= 0; k--)
+          {
+            if (NodeList[k * width + j].IsNode)
+            {
+              NodeList[k * width + j].NeighborBottomX = NodeList[i * width + j].OwnX;
+              NodeList[k * width + j].NeighborBottomY = NodeList[i * width + j].OwnY;
+              break;
+            }
+          }
         };
       } 
     }
